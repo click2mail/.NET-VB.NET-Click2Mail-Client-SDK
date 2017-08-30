@@ -1,0 +1,19 @@
+\\npwuserver\redirectedfolders\vinnie881\my documents\visual studio 2013\Projects\click2mailVBNET\click2mailVBNET\bin\Debug\click2mailVBNET.exe.config
+\\npwuserver\redirectedfolders\vinnie881\my documents\visual studio 2013\Projects\click2mailVBNET\click2mailVBNET\bin\Debug\click2mailVBNET.exe
+\\npwuserver\redirectedfolders\vinnie881\my documents\visual studio 2013\Projects\click2mailVBNET\click2mailVBNET\bin\Debug\click2mailVBNET.pdb
+\\npwuserver\redirectedfolders\vinnie881\my documents\visual studio 2013\Projects\click2mailVBNET\click2mailVBNET\bin\Debug\click2mailVBNET.xml
+\\npwuserver\redirectedfolders\vinnie881\my documents\visual studio 2013\Projects\click2mailVBNET\click2mailVBNET\obj\Debug\click2mailVBNET.Resources.resources
+\\npwuserver\redirectedfolders\vinnie881\my documents\visual studio 2013\Projects\click2mailVBNET\click2mailVBNET\obj\Debug\click2mailVBNET.vbproj.GenerateResource.Cache
+\\npwuserver\redirectedfolders\vinnie881\my documents\visual studio 2013\Projects\click2mailVBNET\click2mailVBNET\obj\Debug\click2mailVBNET.exe
+\\npwuserver\redirectedfolders\vinnie881\my documents\visual studio 2013\Projects\click2mailVBNET\click2mailVBNET\obj\Debug\click2mailVBNET.xml
+\\npwuserver\redirectedfolders\vinnie881\my documents\visual studio 2013\Projects\click2mailVBNET\click2mailVBNET\obj\Debug\click2mailVBNET.pdb
+\\npwuserver\redirectedfolders\Vinnie881\My Documents\Visual Studio 2013\Projects\click2mailVBNET\click2mailVBNET\obj\Debug\click2mailVBNET.vbprojResolveAssemblyReference.cache
+C:\c2m\vbnet\click2mailVBNET\bin\Debug\click2mailVBNET.exe.config
+C:\c2m\vbnet\click2mailVBNET\bin\Debug\click2mailVBNET.exe
+C:\c2m\vbnet\click2mailVBNET\bin\Debug\click2mailVBNET.pdb
+C:\c2m\vbnet\click2mailVBNET\bin\Debug\click2mailVBNET.xml
+C:\c2m\vbnet\click2mailVBNET\obj\Debug\click2mailVBNET.Resources.resources
+C:\c2m\vbnet\click2mailVBNET\obj\Debug\click2mailVBNET.vbproj.GenerateResource.Cache
+C:\c2m\vbnet\click2mailVBNET\obj\Debug\click2mailVBNET.exe
+C:\c2m\vbnet\click2mailVBNET\obj\Debug\click2mailVBNET.xml
+C:\c2m\vbnet\click2mailVBNET\obj\Debug\click2mailVBNET.pdb

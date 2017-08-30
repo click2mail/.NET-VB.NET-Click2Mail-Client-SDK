@@ -1,0 +1,13 @@
+C:\c2m\vbnet\testSDK\bin\Debug\testSDK.exe.config
+C:\c2m\vbnet\testSDK\bin\Debug\testSDK.exe
+C:\c2m\vbnet\testSDK\bin\Debug\testSDK.pdb
+C:\c2m\vbnet\testSDK\bin\Debug\testSDK.xml
+C:\c2m\vbnet\testSDK\bin\Debug\click2mailVBNET.exe
+C:\c2m\vbnet\testSDK\bin\Debug\click2mailVBNET.pdb
+C:\c2m\vbnet\testSDK\bin\Debug\click2mailVBNET.xml
+C:\c2m\vbnet\testSDK\obj\Debug\testSDK.vbprojResolveAssemblyReference.cache
+C:\c2m\vbnet\testSDK\obj\Debug\testSDK.Resources.resources
+C:\c2m\vbnet\testSDK\obj\Debug\testSDK.vbproj.GenerateResource.Cache
+C:\c2m\vbnet\testSDK\obj\Debug\testSDK.exe
+C:\c2m\vbnet\testSDK\obj\Debug\testSDK.xml
+C:\c2m\vbnet\testSDK\obj\Debug\testSDK.pdb

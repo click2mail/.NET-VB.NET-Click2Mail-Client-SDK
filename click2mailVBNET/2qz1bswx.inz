@@ -1,0 +1,334 @@
+﻿Imports System.Xml
+Imports System.IO
+Imports System.Net
+Imports System.Text
+Module Module1
+
+    Sub Main()
+        startHere("Vinnie881", "ljfva0987FK")
+
+    End Sub
+
+
+
+    Private wr As HttpWebRequest
+    Private _XMLDOC As XmlDocument = Nothing
+    Private _file As String = String.Empty
+    Private Const _Smainurl As String = "https://stage-batch.click2mail.com"
+    Private Const _Lmainurl As String = "https://batch.click2mail.com"
+    Private Const _LRestmainurl As String = "https://rest.click2mail.com"
+    Private Const _sRestmainurl As String = "https://stage-rest.click2mail.com"
+    Private _url As String = String.Empty
+    Private _authinfo As String = String.Empty
+
+
+
+    Private Sub startHere(ByVal username As String, ByVal password As String)
+        'Assign your file
+        _file = "C:\test\test.pdf"
+
+        'Populate your xml
+        Dim sb As String
+
+        sb = "<?xml version=""1.0"" encoding=""UTF-8"" standalone=""no""?>" &
+        "<batch>" &
+        "    <username>" & username & "</username>" &
+        "    <password>" & password & "</password>" &
+        "    <filename>pdf6552108975977616798.pdf</filename>" &
+        "    <appSignature>MyTest App</appSignature>" &
+        "    <job>" &
+        "        <startingPage>1</startingPage>" &
+        "        <endingPage>6</endingPage>" &
+        "        <printProductionOptions>" &
+        "            <documentClass>Letter 8.5 x 11</documentClass>" &
+        "            <layout>Address on First Page</layout>" &
+        "            <productionTime>Next Day</productionTime>" &
+        "            <envelope>#10 Double Window</envelope>" &
+        "            <color>Full Color</color>" &
+        "            <paperType>White 24#</paperType>" &
+        "            <printOption>Printing One side</printOption>" &
+        "            <mailClass>First Class</mailClass>" &
+        "        </printProductionOptions>" &
+        "        <recipients>" &
+        "            <address>" &
+        "                <name>Click2mail Test</name>" &
+        "                <organization />" &
+        "                <address1>5830 OakWood Dr 2g</address1>" &
+        "                <address2 />" &
+        "                <address3 />" &
+        "                <city>Oak Brook</city>" &
+        "                <state>IL</state>" &
+        "                <postalCode>60523</postalCode>" &
+        "                <country>United States</country>" &
+        "            </address>" &
+        "        </recipients>" &
+        "    </job>" &
+        " <job>" &
+        "        <startingPage>7</startingPage>" &
+        "        <endingPage>10</endingPage>" &
+        "        <printProductionOptions>" &
+        "            <documentClass>Letter 8.5 x 11</documentClass>" &
+        "            <layout>Address on First Page</layout>" &
+        "            <productionTime>Next Day</productionTime>" &
+        "            <envelope>#10 Double Window</envelope>" &
+        "            <color>Full Color</color>" &
+        "            <paperType>White 24#</paperType>" &
+        "            <printOption>Printing One side</printOption>" &
+        "            <mailClass>First Class</mailClass>" &
+        "        </printProductionOptions>" &
+        "        <recipients>" &
+        "            <address>" &
+        "                <name>Click2mail Test</name>" &
+        "                <organization />" &
+        "                <address1>1420 Kensington Rd</address1>" &
+        "                <address2>ste 310</address2>" &
+        "                <address3 />" &
+        "                <city>Oak Brook</city>" &
+        "                <state>IL</state>" &
+        "                <postalCode>60523</postalCode>" &
+        "                <country>United States</country>" &
+        "            </address>" &
+        "        </recipients>" &
+        "    </job>" &
+        "</batch>"
+
+
+
+        _XMLDOC.LoadXml(sb.ToString)
+
+
+        _authinfo = username & ":" & password
+
+        Dim batchid As Integer = createbatch()
+        uploadBatchxml(batchid)
+        uploadBatchPDF(batchid)
+        submitbatch(batchid)
+    End Sub
+
+    'Rest Calls'
+
+
+    'BATCH CALLS'
+    Private Function getbatchstatus(ByVal batchid As Integer, ByRef results As String) As String
+        Dim strURI As String = String.Empty
+        strURI = _url & "/v1/batches/" & batchid
+        Console.WriteLine(strURI)
+        Dim request As HttpWebRequest = CType(WebRequest.Create(strURI), HttpWebRequest)
+        Dim authinfo As String
+        authinfo = Convert.ToBase64String(Encoding.Default.GetBytes(_authinfo))
+        request.Headers("Authorization") = "Basic " + authinfo
+        request.Method = System.Net.WebRequestMethods.Http.Get
+        Dim result As String
+        Try
+            Using response As WebResponse = request.GetResponse()
+                Using reader As New StreamReader(response.GetResponseStream())
+                    result = reader.ReadToEnd()
+
+                End Using
+            End Using
+            results = result
+            Console.Write(result)
+
+            Return parseReturnxml(result, "hasErrors")
+        Catch ex As Exception
+            Console.Write(ex.Message)
+        End Try
+        Return ""
+    End Function
+    Private Function createbatch() As Integer
+        Dim request As HttpWebRequest
+        Dim response As HttpWebResponse = Nothing
+        Dim reader As StreamReader
+        Dim address As Uri
+        Dim data As StringBuilder = Nothing
+        Dim byteData() As Byte = Nothing
+        Dim postStream As Stream = Nothing
+
+        address = New Uri(_url & "/v1/batches")
+
+        Dim authinfo As String
+        authinfo = Convert.ToBase64String(Encoding.Default.GetBytes(_authinfo))
+
+        ' Create the web request  
+        request = DirectCast(WebRequest.Create(address), HttpWebRequest)
+        request.Headers("Authorization") = "Basic " + authinfo
+        request.Method = "POST"
+        request.ContentType = "text/plain"
+        Try
+            response = request.GetResponse()
+        Catch wex As WebException
+            ' This exception will be raised if the server didn't return 200 - OK  
+            ' Try to retrieve more information about the network error  
+            If Not wex.Response Is Nothing Then
+                Dim errorResponse As HttpWebResponse = Nothing
+                Try
+                    errorResponse = DirectCast(wex.Response, HttpWebResponse)
+                    Console.WriteLine( _
+                      "The server returned '{0}' with the status code {1} ({2:d}).", _
+                      errorResponse.StatusDescription, errorResponse.StatusCode, _
+                      errorResponse.StatusCode)
+                Finally
+                    If Not errorResponse Is Nothing Then errorResponse.Close()
+                End Try
+            End If
+        Finally
+            If Not postStream Is Nothing Then postStream.Close()
+        End Try
+        '
+        Try
+
+            reader = New StreamReader(response.GetResponseStream())
+
+            ' Console application output  
+            Dim s As String = reader.ReadToEnd()
+            reader.Close()
+            Console.Write(s)
+            Return parseReturnxml(s, "id")
+            '    c2m.StatusPick.jobStatus = parsexml(s, "status")
+            'MsgBox(s)
+
+        Finally
+            ' If c2m.jobid = 0 Then
+            '            c2m.StatusPick.jobStatus = 99
+            'End If
+            'If Not response Is Nothing Then response.Close()
+        End Try
+    End Function
+    Private Sub submitbatch(batchid As Integer)
+        Dim request As HttpWebRequest
+        Dim response As HttpWebResponse = Nothing
+        Dim reader As StreamReader
+        Dim address As Uri
+
+        Dim postStream As Stream = Nothing
+
+        address = New Uri(_url & "/v1/batches/" & batchid)
+
+        Dim authinfo As String
+        authinfo = Convert.ToBase64String(Encoding.Default.GetBytes(_authinfo))
+
+        ' Create the web request  
+        request = DirectCast(WebRequest.Create(address), HttpWebRequest)
+        request.Headers("Authorization") = "Basic " + authinfo
+        request.Method = "POST"
+
+        Try
+            response = request.GetResponse()
+        Catch wex As WebException
+            ' This exception will be raised if the server didn't return 200 - OK  
+            ' Try to retrieve more information about the network error  
+            If Not wex.Response Is Nothing Then
+                Dim errorResponse As HttpWebResponse = Nothing
+                Try
+                    errorResponse = DirectCast(wex.Response, HttpWebResponse)
+                    Console.WriteLine( _
+                      "The server returned '{0}' with the status code {1} ({2:d}).", _
+                      errorResponse.StatusDescription, errorResponse.StatusCode, _
+                      errorResponse.StatusCode)
+                Finally
+                    If Not errorResponse Is Nothing Then errorResponse.Close()
+                End Try
+            End If
+        Finally
+            If Not postStream Is Nothing Then postStream.Close()
+        End Try
+        '
+        Try
+
+            reader = New StreamReader(response.GetResponseStream())
+        Finally
+        End Try
+
+    End Sub
+    Private Sub uploadBatchxml(batchid As Integer)
+
+        Dim strURI As String = String.Empty
+        strURI = _url & "/v1/batches/" & batchid
+        Dim request As HttpWebRequest = CType(WebRequest.Create(strURI), HttpWebRequest)
+        Dim authinfo As String
+        authinfo = Convert.ToBase64String(Encoding.Default.GetBytes(_authinfo))
+        request.Headers("Authorization") = "Basic " + authinfo
+        request.Accept = "application/xml"
+        request.Method = "PUT"
+        Using ms As New MemoryStream()
+            _XMLDOC.Save(ms)
+            request.ContentLength = ms.Length
+            ms.WriteTo(request.GetRequestStream())
+        End Using
+        Dim result As String
+
+        Using response As WebResponse = request.GetResponse()
+            Using reader As New StreamReader(response.GetResponseStream())
+                result = reader.ReadToEnd()
+            End Using
+        End Using
+
+        Console.WriteLine(result)
+    End Sub
+    Private Sub uploadBatchPDF(batchid As Integer)
+
+        Dim client As New WebClient
+
+        Dim strURI As String = String.Empty
+        strURI = _url & "/v1/batches/" & batchid
+        Dim authinfo As String
+        authinfo = Convert.ToBase64String(Encoding.Default.GetBytes(_authinfo))
+        client.Headers("Authorization") = "Basic " + authinfo
+        client.Headers.Add("Content-Type", "application/pdf")
+        'Dim sentXml As Byte() = System.Text.Encoding.ASCII.GetBytes(_XMLDOC.OuterXml)
+
+        Dim fInfo As New FileInfo(_file)
+
+        Dim numBytes As Long = fInfo.Length
+
+        Dim fStream As New FileStream(_file, FileMode.Open, FileAccess.Read)
+
+        Dim br As New BinaryReader(fStream)
+
+        Dim data As Byte() = br.ReadBytes(CInt(numBytes))
+
+        ' Show the number of bytes in the array.
+
+
+        br.Close()
+
+        fStream.Close()
+
+
+
+
+        Dim response As Byte() = client.UploadData(strURI, "PUT", data)
+
+        Console.WriteLine(System.Text.Encoding.Default.GetString(response))
+
+
+        'Console.WriteLine(response.ToString())
+    End Sub
+    Private Function parseReturnxml(strxml As String, lookfor As String) As String
+
+        Dim s As String = 99
+
+        ' Create an XmlReader
+        Using reader As XmlReader = XmlReader.Create(New StringReader(strxml))
+
+            '            reader.ReadToFollowing(lookfor)
+            'reader.MoveToFirstAttribute()
+            'Dim genre As String = reader.Value
+            'output.AppendLine("The genre value: " + genre)
+
+            reader.ReadToFollowing(lookfor)
+            s = reader.ReadElementContentAsString()
+            reader.Close()
+
+
+
+        End Using
+
+        Return s
+
+
+
+    End Function
+
+
+End Module
